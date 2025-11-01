@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    deprecated.daemonset.template.generation: "1"
+    meta.helm.sh/release-name: tetragon
+    meta.helm.sh/release-namespace: tetragon
+  creationTimestamp: "2025-10-30T11:10:58Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: agent
+    app.kubernetes.io/instance: tetragon
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: tetragon
+    app.kubernetes.io/part-of: tetragon
+    app.kubernetes.io/version: 1.6.0
+    helm.sh/chart: tetragon-1.6.0
+  name: tetragon
+  namespace: tetragon
+  resourceVersion: "12924"
+  uid: dc2abe76-124c-4bf9-aa40-17160808a596
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: tetragon
+      app.kubernetes.io/name: tetragon
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: 64c525d4d45e4a1017ec271725687f3470a4980dcfb792c71205e37a5a4fbc0f
+      labels:
+        app.kubernetes.io/component: agent
+        app.kubernetes.io/instance: tetragon
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: tetragon
+        app.kubernetes.io/part-of: tetragon
+        app.kubernetes.io/version: 1.6.0
+        helm.sh/chart: tetragon-1.6.0
+    spec:
+      containers:
+      - args:
+        - /var/run/cilium/tetragon/tetragon.log
+        command:
+        - hubble-export-stdout
+        image: quay.io/cilium/hubble-export-stdout:v1.1.0
+        imagePullPolicy: IfNotPresent
+        name: export-stdout
+        resources: {}
+        securityContext: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /var/run/cilium/tetragon
+          name: export-logs
+      - args:
+        - --config-dir=/etc/tetragon/tetragon.conf.d/
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        image: quay.io/cilium/tetragon:v1.6.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          grpc:
+            port: 6789
+            service: liveness
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 60
+        name: tetragon
+        resources: {}
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+        - mountPath: /etc/tetragon/tetragon.conf.d/
+          name: tetragon-config
+          readOnly: true
+        - mountPath: /sys/fs/bpf
+          mountPropagation: Bidirectional
+          name: bpf-maps
+        - mountPath: /var/run/cilium
+          name: cilium-run
+        - mountPath: /var/run/cilium/tetragon
+          name: export-logs
+        - mountPath: /procRoot
+          name: host-proc
+      dnsPolicy: Default
+      hostNetwork: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: tetragon
+      serviceAccountName: tetragon
+      terminationGracePeriodSeconds: 1
+      tolerations:
+      - operator: Exists
+      volumes:
+      - hostPath:
+          path: /var/run/cilium
+          type: DirectoryOrCreate
+        name: cilium-run
+      - hostPath:
+          path: /var/run/cilium/tetragon
+          type: DirectoryOrCreate
+        name: export-logs
+      - configMap:
+          defaultMode: 420
+          name: tetragon-config
+        name: tetragon-config
+      - hostPath:
+          path: /sys/fs/bpf
+          type: DirectoryOrCreate
+        name: bpf-maps
+      - hostPath:
+          path: /proc
+          type: Directory
+        name: host-proc
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+status:
+  currentNumberScheduled: 1
+  desiredNumberScheduled: 1
+  numberAvailable: 1
+  numberMisscheduled: 0
+  numberReady: 1
+  observedGeneration: 1
+  updatedNumberScheduled: 1
