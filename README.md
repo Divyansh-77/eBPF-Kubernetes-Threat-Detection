@@ -27,6 +27,6 @@ Traditional security tools often have a "blind spot" in Kubernetes, as they cann
 * **Validated Low-Overhead:** Confirmed minimal performance impact using `kubectl top pods`. [cite_start]The agent consumed only **6m (milliCPU)** and **~119Mi of Memory** while actively monitoring. [cite: 65]
 
 ## 📄 Project Files
-* [cite_start]**`Final_Report.pdf`:**  Full academic report, methodology, and performance analysis.
+* **`Final_Report.pdf`:**  Full academic report, methodology, and performance analysis.
 * **`tetragon-daemonset.yaml`:** The Kubernetes manifest for deploying the eBPF agent to all nodes.
 * **`test-pod.yaml`:** The manifest for the "victim" pod used for attack simulations.
