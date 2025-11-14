@@ -1,3 +1,11 @@
+## 🛠️ Technology Stack
+
+| Category | Tools |
+| :--- | :--- |
+| **Orchestration** | ![Kubernetes](https://img.shields.io/badge/Kubernetes-%23326CE5.svg?style=for-the-badge&logo=Kubernetes&logoColor=white) ![Minikube](https://img.shields.io/badge/Minikube-%23326CE5.svg?style=for-the-badge&logo=Minikube&logoColor=white) |
+| **Security & eBPF** | ![eBPF](https://img.shields.io/badge/eBPF-black?style=for-the-badge&logo=linux&logoColor=white) ![Tetragon](https://img.shields.io/badge/Tetragon-9B59B6?style=for-the-badge) |
+| **Observability** | ![Prometheus](https://img.shields.io/badge/Prometheus-%23E6522C.svg?style=for-the-badge&logo=Prometheus&logoColor=white) ![Grafana](https://img.shields.io/badge/Grafana-%23F46800.svg?style=for-the-badge&logo=Grafana&logoColor=white) ![Loki](httpsimg.shields.io/badge/Loki-%23F09541.svg?style=for-the-badge&logo=Loki&logoColor=white) |
+| **Configuration** | ![Helm](https://img.shields.io/badge/Helm-%230F1689.svg?style=for-the-badge&logo=Helm&logoColor=white) |
 # eBPF-based Runtime Threat Detection for Kubernetes
 
 This project implements an end-to-end DevSecOps workflow to detect, visualize, and alert on runtime security threats in a Kubernetes (Minikube) cluster using eBPF, Tetragon, Prometheus, Grafana, and Loki.
